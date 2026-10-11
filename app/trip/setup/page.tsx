@@ -36,7 +36,7 @@ export default async function TripSetup({
             </dl>
           </section>
 
-          <TripSetupForm key={route.id} origin={route.origin} destination={route.destination} />
+          <TripSetupForm key={route.id} routeId={route.id} />
           <p className="mt-5 text-xs leading-relaxed text-slate-500">All route details are mock data and have not been verified. Vehicle details stay on this page and reset when you reload.</p>
         </section>
       </div>
