@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, BusFront } from "lucide-react";
 import ActiveTripPanel from "@/components/ActiveTripPanel";
+import EndTripButton from "@/components/EndTripButton";
 import { savedRoutes } from "@/data/routes";
 import { mockJourneys } from "@/data/journeys";
 
@@ -30,6 +31,8 @@ export default async function ActiveTrip({ searchParams }: {
           <label htmlFor="journey-progress" className="mb-2 flex justify-between text-sm font-semibold text-slate-800"><span>Mock journey progress</span><span>{journey.progress}%</span></label>
           <progress id="journey-progress" max={100} value={journey.progress} className="mb-6 h-3 w-full overflow-hidden rounded-full accent-brand" />
           <ActiveTripPanel key={route.id} journey={journey} />
+          <Link href={`/trip/family?route=${encodeURIComponent(route.id)}`} className="mt-5 block rounded-xl border border-brand px-4 py-3 text-center text-sm font-semibold text-brand hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">Preview Family View</Link>
+          <EndTripButton routeId={route.id} origin={route.origin} destination={route.destination} />
           <p className="mt-5 text-xs leading-relaxed text-slate-500">All journey information is mock data. Progress and updates are fixed examples, with no live tracking.</p>
         </section>
       </div>

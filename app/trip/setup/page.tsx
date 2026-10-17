@@ -37,7 +37,7 @@ export default async function TripSetup({
           </section>
 
           <TripSetupForm key={route.id} routeId={route.id} />
-          <p className="mt-5 text-xs leading-relaxed text-slate-500">All route details are mock data and have not been verified. Vehicle details stay on this page and reset when you reload.</p>
+          <p className="mt-5 text-xs leading-relaxed text-slate-500">All route details are mock data and have not been verified. Start Trip saves vehicle details in this browser tab for the Family View preview; they are not sent to a server.</p>
         </section>
       </div>
     </main>

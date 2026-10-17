@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { saveTripDetails } from "@/data/tripDetails";
 
 export default function TripSetupForm({ routeId }: { routeId: string }) {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function TripSetupForm({ routeId }: { routeId: string }) {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    saveTripDetails(routeId, { busColour: busColour.trim(), description: description.trim() });
     router.push(`/trip/active?route=${encodeURIComponent(routeId)}`);
   }
 
@@ -24,7 +26,7 @@ export default function TripSetupForm({ routeId }: { routeId: string }) {
         <textarea id="crew-description" name="crewDescription" value={description} onChange={(event) => setDescription(event.target.value)} maxLength={500} rows={3} placeholder="e.g. Conductor wearing a blue shirt" className="w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-brand focus:ring-2 focus:ring-blue-100" />
       </div>
       <button type="submit" className="w-full rounded-xl bg-brand px-4 py-3 font-semibold text-white hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">Start Trip</button>
-      <p className="text-xs text-slate-500">Start Trip opens a mock journey preview. Vehicle details are not carried into the preview.</p>
+      <p className="text-xs text-slate-500">Start Trip opens a mock journey preview. Vehicle details are kept in this browser tab for the Family View preview.</p>
     </form>
   );
 }
