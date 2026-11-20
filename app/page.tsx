@@ -1,7 +1,6 @@
 import { ShieldCheck } from "lucide-react";
 import DestinationSearch from "@/components/DestinationSearch";
-import RouteCard from "@/components/RouteCard";
-import { savedRoutes } from "@/data/routes";
+import HomeRoutes from "@/components/HomeRoutes";
 
 export default function Home() {
   return (
@@ -15,7 +14,7 @@ export default function Home() {
           <div className="mb-6"><p className="text-sm text-slate-500">Good morning</p><h2 id="welcome" className="text-2xl font-bold text-slate-900">Welcome aboard</h2></div>
           <DestinationSearch />
           <div className="mb-3 mt-8 flex items-center justify-between"><h2 className="font-semibold text-slate-900">Saved routes</h2><span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-brand">Demo</span></div>
-          <div className="space-y-3">{savedRoutes.map((route) => <RouteCard key={route.id} route={route} />)}</div>
+          <HomeRoutes />
           <p className="mt-5 text-xs leading-relaxed text-slate-500">Sample fares and times are from the design preview and have not been independently verified. Route search and live tracking will be added later.</p>
         </section>
         <p className="mt-6 text-center text-xs text-slate-500">Day 1 starter · Interface only · No GPS or family tracking yet</p>
