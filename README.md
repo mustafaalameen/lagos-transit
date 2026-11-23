@@ -1,6 +1,6 @@
 # Lagos Transit Safety Companion — Day 1 Starter
 
-This is a **frontend-only** Next.js prototype of the Home screen from the uploaded design preview. Route fares/times are illustration data, not verified public-transport information. There is **no** authentication, GPS, family tracking, or SOS action implemented yet.
+This Next.js prototype loads transport routes from Supabase and supports email/password accounts with private profiles. Route fares/times are illustration data, not verified public-transport information. Trip screens remain mock previews.
 
 ## Run on Windows
 
@@ -33,8 +33,8 @@ npm run build
 ## Supabase connectivity
 
 The Supabase JavaScript package is installed, and `lib/supabase/client.ts` exports
-`getSupabase()` for future database work. The client initializes only when called.
-The current screens continue using mock data without making Supabase requests.
+`getSupabase()` for browser database and Auth requests. The client initializes only
+when called. Browser sessions persist and refresh; terminal use stays stateless.
 
 1. Copy `.env.example` to `.env.local`.
 2. Set `NEXT_PUBLIC_SUPABASE_URL` to your Supabase project URL.
@@ -63,6 +63,32 @@ included at build time. Use the publishable key only. Keep `.env.local` out of G
 the existing `.gitignore` excludes it, while `.env.example` can be committed.
 Select Node.js 22.x or 24.x in Vercel's project settings to match the installed
 Supabase package's Node.js requirement.
+
+## Accounts and profiles
+
+Apply `supabase/migrations/20261120010000_create_profiles.sql` through the CLI
+migration workflow before using accounts. The migration creates one profile per
+Auth user through a trigger and backfills profiles for existing users. Public
+clients cannot insert/delete profiles or change their identity/creation time.
+Authenticated users can read and edit only their own name, phone, and
+accessibility preference, enforced by database RLS.
+
+Use `/signup` to register, `/login` to log in, and `/profile` to edit your profile.
+The Home account navigation provides logout for the current device. Profile
+content requires a session; Home and all mock trip pages remain public. Session
+state is browser-based at this stage; no server-side protected pages are added.
+
+In Supabase Auth, keep the project's email confirmation setting as appropriate.
+When confirmation is required, signup shows a check-email message rather than
+claiming the user is logged in. In Authentication > URL Configuration, set your
+production Site URL and allow your login return URLs, including
+`http://localhost:3000/login` and `https://YOUR-DEPLOYMENT/login`. If testing on
+another local port, allow that port's `/login` URL as well. No additional public
+environment variables or packages are required.
+
+Profile changes are real database updates; trip previews and their existing
+browser vehicle details remain unchanged. Accessibility mode currently stores a
+preference only.
 
 ## Important
 

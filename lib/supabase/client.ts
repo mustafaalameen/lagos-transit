@@ -25,11 +25,12 @@ export function getSupabase(): SupabaseClient {
     throw new Error("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY must contain a current sb_publishable_ key.");
   }
 
+  const browser = typeof window !== "undefined";
   client = createClient(url, publishableKey, {
     auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-      detectSessionInUrl: false,
+      persistSession: browser,
+      autoRefreshToken: browser,
+      detectSessionInUrl: browser,
     },
   });
 

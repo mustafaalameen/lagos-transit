@@ -1,6 +1,7 @@
 import { ShieldCheck } from "lucide-react";
 import DestinationSearch from "@/components/DestinationSearch";
 import HomeRoutes from "@/components/HomeRoutes";
+import AccountNav from "@/components/AccountNav";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand text-white"><ShieldCheck aria-hidden="true" size={24} /></div>
           <div><p className="text-sm font-semibold text-brand">Lagos Transit</p><h1 className="text-xl font-bold tracking-tight text-slate-900">Safety Companion</h1></div>
         </header>
+        <AccountNav />
         <section className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm sm:p-7" aria-labelledby="welcome">
           <div className="mb-6"><p className="text-sm text-slate-500">Good morning</p><h2 id="welcome" className="text-2xl font-bold text-slate-900">Welcome aboard</h2></div>
           <DestinationSearch />
