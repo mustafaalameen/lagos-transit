@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import { readTripDetails, type TripDetails } from "@/data/tripDetails";
 
-export default function FamilyVehicleDetails({ routeId }: { routeId: string }) {
+export default function FamilyVehicleDetails({ routeId, tripId }: { routeId: string; tripId?: string }) {
   const [details, setDetails] = useState<TripDetails | null>(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    setDetails(readTripDetails(routeId));
+    setDetails(readTripDetails(routeId, tripId));
     setLoaded(true);
-  }, [routeId]);
+  }, [routeId, tripId]);
 
   return (
     <section className="mt-5 rounded-xl border border-stone-200 p-4" aria-labelledby="vehicle-details-title">

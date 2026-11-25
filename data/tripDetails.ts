@@ -3,26 +3,30 @@ export type TripDetails = {
   description: string;
 };
 
-export function clearTripDetails(routeId: string): boolean {
+function storageKey(routeId: string, tripId?: string) {
+  return `lagos-transit:vehicle:${tripId ? `trip:${tripId}` : routeId}`;
+}
+
+export function clearTripDetails(routeId: string, tripId?: string): boolean {
   try {
-    sessionStorage.removeItem(`lagos-transit:vehicle:${routeId}`);
+    sessionStorage.removeItem(storageKey(routeId, tripId));
     return true;
   } catch {
     return false;
   }
 }
 
-export function saveTripDetails(routeId: string, details: TripDetails) {
+export function saveTripDetails(routeId: string, details: TripDetails, tripId?: string) {
   try {
-    sessionStorage.setItem(`lagos-transit:vehicle:${routeId}`, JSON.stringify(details));
+    sessionStorage.setItem(storageKey(routeId, tripId), JSON.stringify(details));
   } catch {
     // The mock journey still works if browser storage is unavailable.
   }
 }
 
-export function readTripDetails(routeId: string): TripDetails | null {
+export function readTripDetails(routeId: string, tripId?: string): TripDetails | null {
   try {
-    const stored = sessionStorage.getItem(`lagos-transit:vehicle:${routeId}`);
+    const stored = sessionStorage.getItem(storageKey(routeId, tripId));
     if (!stored) return null;
     const details: unknown = JSON.parse(stored);
     if (typeof details !== "object" || details === null || !("busColour" in details) || !("description" in details)) return null;

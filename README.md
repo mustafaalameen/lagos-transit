@@ -1,6 +1,6 @@
 # Lagos Transit Safety Companion — Day 1 Starter
 
-This Next.js prototype loads transport routes from Supabase and supports email/password accounts with private profiles. Route fares/times are illustration data, not verified public-transport information. Trip screens remain mock previews.
+This Next.js prototype loads transport routes from Supabase and supports email/password accounts, private profiles, and saved trips. Route fares/times are illustration data, not verified public-transport information. Journey progress and Family View remain mock previews.
 
 ## Run on Windows
 
@@ -75,7 +75,8 @@ accessibility preference, enforced by database RLS.
 
 Use `/signup` to register, `/login` to log in, and `/profile` to edit your profile.
 The Home account navigation provides logout for the current device. Profile
-content requires a session; Home and all mock trip pages remain public. Session
+content requires a session; Home and route setup remain public. Saved trip data
+requires login, while old mock-preview URLs remain available. Session
 state is browser-based at this stage; no server-side protected pages are added.
 
 In Supabase Auth, keep the project's email confirmation setting as appropriate.
@@ -86,9 +87,32 @@ production Site URL and allow your login return URLs, including
 another local port, allow that port's `/login` URL as well. No additional public
 environment variables or packages are required.
 
-Profile changes are real database updates; trip previews and their existing
-browser vehicle details remain unchanged. Accessibility mode currently stores a
+Profile changes are real database updates. Accessibility mode currently stores a
 preference only.
+
+## Saved trips
+
+Apply `supabase/migrations/20261124000000_create_trips.sql` before starting saved
+trips. Route browsing and mock previews stay public; Start Trip requires login.
+Home carries the database route UUID into Setup alongside the existing route
+slug. Direct slug-only Setup links resolve a matching active database route.
+
+Start Trip saves the signed-in user's trip and vehicle details before navigating
+to `/trip/active?route=...&trip=...`. The trip UUID stays in the URL through Family
+Preview and completion. RLS denies anonymous access and limits authenticated
+users to their own trips. The server sets completion timestamps; clients cannot
+change trip identity, ownership, creation times, or share tokens. No sharing is
+enabled, and unknown expected arrival times remain NULL.
+
+On creation failure, Setup retains its fields. On completion failure, Active Trip
+retains its local vehicle notes. Retries reuse the creation request UUID or
+recognize an already completed trip, handling a lost success response without
+creating duplicates or resetting `ended_at`. Local Family Preview notes are
+scoped by trip UUID and cleared only after confirmed database completion. If
+local cleanup fails after completion is saved, Finish completion retries cleanup.
+Family Preview links carrying a saved trip ID verify the same trip ownership
+before displaying local notes.
+Progress, next stops, map placeholders, and Family Preview remain mock displays.
 
 ## Important
 

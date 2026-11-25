@@ -37,8 +37,17 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
         } })
         : await client.auth.signInWithPassword({ email, password });
       if (result.error) {
+        // Log classification only: never credentials, session data, or raw errors.
+        console.warn("Supabase auth request failed", {
+          action: mode,
+          code: result.error.code ?? "unknown",
+          status: result.error.status ?? null,
+          name: result.error.name,
+        });
         if (result.error.code === "email_not_confirmed") setError("Please confirm your email before logging in.");
         else if (result.error.status === 429) setError("Too many attempts. Please wait before trying again.");
+        else if (result.error.status && result.error.status >= 500) setError("Account services are temporarily unavailable. Please try again shortly.");
+        else if (result.error.name === "AuthRetryableFetchError" || result.error.status === 0) setError("We couldn’t reach account services. Check your connection and try again.");
         else setError(signup ? "We couldn’t create your account. Check your details and try again." : "We couldn’t log you in. Check your email and password and try again.");
         return;
       }

@@ -22,5 +22,5 @@ export default function RouteCard({ route }: { route: TransportRoute }) {
 
   if (!setupRouteId) return <article className="flex items-center gap-3 rounded-xl bg-stone-100 p-4">{content}</article>;
 
-  return <Link href={`/trip/setup?route=${encodeURIComponent(setupRouteId)}`} className="flex items-center gap-3 rounded-xl bg-stone-100 p-4 transition-colors hover:bg-stone-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">{content}</Link>;
+  return <Link href={`/trip/setup?route=${encodeURIComponent(setupRouteId)}&routeId=${encodeURIComponent(route.id)}`} className="flex items-center gap-3 rounded-xl bg-stone-100 p-4 transition-colors hover:bg-stone-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">{content}</Link>;
 }

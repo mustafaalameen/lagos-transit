@@ -1,20 +1,23 @@
 import Link from "next/link";
 import { ArrowLeft, Battery, Map, MessageSquare, Phone } from "lucide-react";
 import FamilyVehicleDetails from "@/components/FamilyVehicleDetails";
+import TripGuard from "@/components/TripGuard";
 import { savedRoutes } from "@/data/routes";
 import { mockJourneys } from "@/data/journeys";
 
 export default async function FamilyTracking({ searchParams }: {
-  searchParams: Promise<{ route?: string | string[] }>;
+  searchParams: Promise<{ route?: string | string[]; trip?: string | string[] }>;
 }) {
-  const { route: routeId } = await searchParams;
+  const { route: routeId, trip } = await searchParams;
+  const tripId = typeof trip === "string" ? trip : undefined;
   const route = savedRoutes.find((item) => item.id === routeId) ?? savedRoutes[0];
   const journey = mockJourneys[route.id as keyof typeof mockJourneys] ?? mockJourneys["yaba-obalende"];
 
   return (
+    <TripGuard tripId={tripId} routeSlug={route.id} stage="preview">
     <main className="min-h-screen bg-canvas px-4 py-8 sm:py-16">
       <div className="mx-auto max-w-xl">
-        <Link href={`/trip/active?route=${encodeURIComponent(route.id)}`} className="mb-6 inline-flex items-center gap-2 rounded text-sm font-semibold text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"><ArrowLeft size={18} aria-hidden="true" /> Back to Active Trip</Link>
+        <Link href={`/trip/active?route=${encodeURIComponent(route.id)}${tripId ? `&trip=${encodeURIComponent(tripId)}` : ""}`} className="mb-6 inline-flex items-center gap-2 rounded text-sm font-semibold text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"><ArrowLeft size={18} aria-hidden="true" /> Back to Active Trip</Link>
         <section className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm sm:p-7" aria-labelledby="family-title">
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-semibold text-brand">Lagos Transit Safety Companion</p>
@@ -34,7 +37,7 @@ export default async function FamilyTracking({ searchParams }: {
             <p className="mt-2 text-sm text-slate-600">{route.origin} → {route.destination}</p>
             <p className="mt-2 text-xs text-slate-500">No live location is displayed.</p>
           </section>
-          <FamilyVehicleDetails key={route.id} routeId={route.id} />
+          <FamilyVehicleDetails key={`${route.id}:${tripId ?? ""}`} routeId={route.id} tripId={tripId} />
           <div className="mt-5 grid grid-cols-2 gap-3">
             <button type="button" disabled aria-describedby="contact-demo-note" className="flex items-center justify-center gap-2 rounded-xl bg-stone-200 px-4 py-3 font-semibold text-slate-500 disabled:cursor-not-allowed"><MessageSquare size={18} aria-hidden="true" /> Message</button>
             <button type="button" disabled aria-describedby="contact-demo-note" className="flex items-center justify-center gap-2 rounded-xl bg-stone-200 px-4 py-3 font-semibold text-slate-500 disabled:cursor-not-allowed"><Phone size={18} aria-hidden="true" /> Call</button>
@@ -44,5 +47,6 @@ export default async function FamilyTracking({ searchParams }: {
         </section>
       </div>
     </main>
+    </TripGuard>
   );
 }

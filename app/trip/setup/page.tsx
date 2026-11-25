@@ -6,9 +6,9 @@ import { savedRoutes } from "@/data/routes";
 export default async function TripSetup({
   searchParams,
 }: {
-  searchParams: Promise<{ route?: string | string[] }>;
+  searchParams: Promise<{ route?: string | string[]; routeId?: string | string[] }>;
 }) {
-  const { route: routeId } = await searchParams;
+  const { route: routeId, routeId: databaseRouteId } = await searchParams;
   const route = savedRoutes.find((item) => item.id === routeId) ?? savedRoutes[0];
 
   return (
@@ -36,8 +36,8 @@ export default async function TripSetup({
             </dl>
           </section>
 
-          <TripSetupForm key={route.id} routeId={route.id} />
-          <p className="mt-5 text-xs leading-relaxed text-slate-500">All route details are mock data and have not been verified. Start Trip saves vehicle details in this browser tab for the Family View preview; they are not sent to a server.</p>
+          <TripSetupForm key={`${route.id}:${databaseRouteId ?? ""}`} routeSlug={route.id} databaseRouteId={typeof databaseRouteId === "string" ? databaseRouteId : undefined} />
+          <p className="mt-5 text-xs leading-relaxed text-slate-500">Route estimates are prototype data and have not been verified. Start Trip saves your trip and vehicle details to your account. Journey progress remains a mock preview.</p>
         </section>
       </div>
     </main>
